@@ -1,12 +1,10 @@
-terraform {
-  required_providers {
-    local = {
-      source  = "hashicorp/local"
-      version = "~> 2.6"
-    }
-  }
+resource "local_file" "pet" {
+  filename = var.filename
+  content  = var.content
 }
-resource "local_file" "demo" {
- filename = "hello.txt"
-content = "This file was created  by Terraform"
+
+resource "random_pet" "mypet" {
+  prefix    = var.prefix
+  separator = var.separator
+  length    = var.length
 }
