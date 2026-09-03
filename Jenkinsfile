@@ -1,8 +1,5 @@
 pipeline {
     agent any
-tools {
-    terraform 'terraform-latest'  // name configured in Jenkins Global Tool Config
-}
 
     environment {
         TF_IN_AUTOMATION = "true"
