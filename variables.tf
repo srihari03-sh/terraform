@@ -11,7 +11,7 @@ variable "content" {
 variable "prefix" {
   description = "Prefix for the random pet name"
   type        = string
-  default     = "MB"
+  default     = "MR"
 }
 variable "separator" {
   description = "Separator used in the random pet name"
