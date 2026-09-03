@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        terraform 'terraform-1.8.0'
+    }
 
     environment {
         TF_IN_AUTOMATION = "true"
