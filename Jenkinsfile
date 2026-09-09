@@ -1,55 +1,40 @@
 pipeline {
     agent any
-    tools {
-        terraform 'terraform'
-    }
 
-    environment {
-        TF_IN_AUTOMATION = "true"
+    tools {
+        nodejs "NodeJS"
     }
 
     stages {
-
-        stage('Checkout from SCM') {
+        stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/srihari03-sh/terraform.git'
+                git url: 'https://github.com/srihari03-sh/terraform.git', branch: 'master'
             }
         }
 
-        stage('Terraform Init') {
+        stage('Check Node & NPM') {
             steps {
-                sh '''
-                terraform --version
-                terraform init
-                '''
+                sh 'node -v'
+                sh 'npm -v'
             }
         }
 
-        stage('Terraform Plan') {
+        stage('Install Dependencies') {
             steps {
-                sh '''
-                terraform plan -out=tfplan
-                '''
+                sh 'npm install'
             }
         }
 
-        stage('Terraform Apply') {
+        stage('Build') {
             steps {
-                input message: 'Approve Terraform Apply?', ok: 'Apply'
-                sh '''
-                terraform apply -auto-approve tfplan
-                '''
+                sh 'CI=false npm run build'
             }
         }
-    }
 
-    post {
-        success {
-            echo 'Terraform pipeline executed successfully.'
-        }
-        failure {
-            echo 'Terraform pipeline failed.'
+        stage('Test') {
+            steps {
+                sh 'npm test || echo "No tests found"'
+            }
         }
     }
 }
