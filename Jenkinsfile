@@ -1,22 +1,12 @@
+```groovy
 pipeline {
     agent any
 
-    tools {
-        nodejs "NodeJS"
-    }
-
     stages {
 
-        stage('Checkout') {
+        stage('Git Checkout') {
             steps {
-                git url: 'https://github.com/srihari03-sh/terraform.git', branch: 'main'
-            }
-        }
-
-        stage('Check Node & NPM') {
-            steps {
-                sh 'node -v'
-                sh 'npm -v'
+                git 'https://github.com/betawins/Trading-UI.git'
             }
         }
 
@@ -25,5 +15,19 @@ pipeline {
                 sh 'npm install'
             }
         }
+
+        stage('Build Application') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('Deploy Application') {
+            steps {
+                sh 'pm2 delete Trading-UI || true'
+                sh 'pm2 start npm --name "Trading-UI" -- start'
+            }
+        }
     }
 }
+```
