@@ -2,30 +2,27 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'NodeJS'
+        nodejs "NodeJS"
     }
 
     stages {
 
-        stage('Git checkout') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/srihari03-sh/terraform.git'
+                git url: 'https://github.com/srihari03-sh/terraform.git', branch: 'main'
             }
         }
 
-        stage('Install npm prerequisites') {
+        stage('Check Node & NPM') {
             steps {
-                sh '''
-                    node --version
-                    npm --version
-                    npm install
-                '''
+                sh 'node -v'
+                sh 'npm -v'
             }
         }
 
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
-                sh 'npm run build'
+                sh 'npm install'
             }
         }
     }
