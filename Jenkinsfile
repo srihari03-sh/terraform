@@ -1,59 +1,32 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'NodeJS'
+    }
+
     stages {
 
-        stage('Checkout') {
+        stage('Git checkout') {
             steps {
-                checkout scm
+                git 'https://github.com/srihari03-sh/terraform.git'
             }
         }
 
-        stage('Check Terraform') {
+        stage('Install npm prerequisites') {
             steps {
                 sh '''
-                    echo "Terraform version:"
-                    terraform version
-
-                    echo "Current directory:"
-                    pwd
-
-                    echo "Files:"
-                    ls -la
+                    node --version
+                    npm --version
+                    npm install
                 '''
             }
         }
 
-        stage('Terraform Init') {
+        stage('Build') {
             steps {
-                sh 'terraform init'
+                sh 'npm run build'
             }
-        }
-
-        stage('Terraform Validate') {
-            steps {
-                sh 'terraform validate'
-            }
-        }
-
-        stage('Terraform Plan') {
-            steps {
-                sh 'terraform plan'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Terraform pipeline completed successfully!'
-        }
-
-        failure {
-            echo 'Terraform pipeline failed. Check the console output.'
-        }
-
-        always {
-            echo 'Pipeline execution completed.'
         }
     }
 }
